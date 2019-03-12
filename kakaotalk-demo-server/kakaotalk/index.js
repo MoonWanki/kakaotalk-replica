@@ -1,4 +1,5 @@
 const Lobby  = require('./Lobby')
+const User = require('./User')
 
 module.exports = io => {
 
@@ -28,6 +29,7 @@ module.exports = io => {
                 })
             }
             else {
+                user.socket = socket
                 lobby.join(user)
             }
         })

@@ -1,0 +1,30 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba($color: black, $alpha: 0.3);
+    overflow: hidden;
+
+    .modal-inner {
+        width: 300px;
+        height: 200px;
+        position: relative;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        background: white;
+        border: 1px solid gray;
+
+        .modal-content {
+
+        }
+
+        .modal-actions {
+            display: absolute;
+            justify-content: center;
+            bottom: 0;
+        }
+    }
+}

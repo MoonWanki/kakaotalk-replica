@@ -1,11 +1,10 @@
 .login {
-    position: relative;
     width: 100vw;
     height: 100vh;
     background: #f8f8f8;
 
     .login-box {
-        position: absolute;
+        position: relative;
         transform: translate(-50%, -50%);
         top: 50%;
         left: 50%;
