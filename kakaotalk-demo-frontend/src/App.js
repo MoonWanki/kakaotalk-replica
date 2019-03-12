@@ -11,8 +11,9 @@ class App extends Component {
 
 	constructor() {
 		super()
-		this.socket = SocketIOClient(process.env.REACT_APP_SERVER_URL)
+		this.socket = SocketIOClient(process.env.REACT_APP_BACKEND_URL)
 		this.socket.on('login_success', () => this.setState({ isLoggedIn: true }))
+		this.socket.on('disconnected_by_reconnection', () => this.setState({ isLoggedIn: false }, () => alert('다른 환경에서 접속되어 로그아웃되었습니다.')))
 	}
 
 	render() {

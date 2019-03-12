@@ -6,6 +6,7 @@ export default class Login extends Component {
 
     state = {
         id: '',
+        nickname: '',
 		unregisteredModalOpen: false,
         alreadyConnectedModalOpen: false,
         registerModalOpen: false,
@@ -23,7 +24,7 @@ export default class Login extends Component {
 
     register = () => {
         this.setState({ registerModalOpen: false })
-        this.props.socket.emit('register', this.state.id)
+        this.props.socket.emit('register', this.state.nickname)
     }
 
     forceLogin = () => {
@@ -56,6 +57,8 @@ export default class Login extends Component {
                 </Modal>}
                 {this.state.registerModalOpen && <Modal onClose={() => this.setState({ registerModalOpen: false })}>
                     <div className='modal-content'>
+                        닉네임을 설정해주세요.
+                        <input onChange={e => this.setState({ nickname: e.target.value})}></input>
                         사용하실 프로필 이미지를 선택해주세요!
                     </div>
                     <div className='modal-actions'>

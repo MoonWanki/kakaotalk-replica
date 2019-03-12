@@ -11,6 +11,7 @@ module.exports = io => {
 
             const user = lobby.findUserById(id)
             
+            // unregistered (new) user
             if(typeof user === 'undefined') {
                 socket.emit('unregistered')
                 socket.on('register', nickname => {
@@ -20,6 +21,8 @@ module.exports = io => {
                     lobby.join(newUser)
                 })
             }
+
+            // already connected user
             else if(user.isOnline) {
                 socket.emit('already_connected')
                 socket.on('force_login', () => {
@@ -28,6 +31,8 @@ module.exports = io => {
                     lobby.join(user)
                 })
             }
+
+            // login available
             else {
                 user.socket = socket
                 lobby.join(user)

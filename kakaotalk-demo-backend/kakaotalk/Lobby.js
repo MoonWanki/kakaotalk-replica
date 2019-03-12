@@ -10,10 +10,11 @@ class Lobby {
 
     register(user) {
         this.users.push(user)
-        this.users.forEach(user => this.notifyUserStatusTo(user))
+        this.users.forEach(user => { if(user.isOnline) this.notifyUserStatusTo(user) })
     }
 
     join(user) {
+        console.log(`${user.nickname}님이 채팅에 접속하였습니다.`)
         user.isOnline = true
         user.socket.on('create_room', () => this.createRoom(user))
         user.socket.on('join_room', roomId => this.onUserJoinRoom(user, roomId))
@@ -27,10 +28,11 @@ class Lobby {
     leave(user) {
         user.isOnline = false
         user.socket = null
+        console.log(`${user.nickname}님이 채팅을 종료하였습니다.`)
     }
 
     kick(user) {
-        user.socket.disconnect()
+        user.socket.emit('disconnected_by_reconnection')
         this.leave(user)
     }
 
