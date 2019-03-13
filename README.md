@@ -17,7 +17,7 @@ $ git clone https://github.com/MoonWanki/kakaotalk-demo.git
 
 #### 2. Install packages from npm (both in backend & Frontend)
 
-```
+```bash
 $ cd kakaotalk-demo-backend
 $ yarn
 $ cd ../kakaotalk-demo-frontend

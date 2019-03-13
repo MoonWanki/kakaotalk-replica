@@ -1,0 +1,22 @@
+.button {
+    width: 70px;
+    height: 48px;
+    border: 1px solid;
+    border-radius: 2px;
+}
+
+.button-normal {
+    background: white;
+}
+
+.button-normal-active:hover {
+    background: lightgray;
+}
+
+.button-accent {
+    background: yellow;
+}
+
+.button-accent-active:hover {
+    background: gold;
+}

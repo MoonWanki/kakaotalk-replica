@@ -1,0 +1,60 @@
+.main {
+    display: flex;
+    height: 100vh;
+    
+    .home {
+        flex: 1;
+
+        .home-header {
+            background: #423630;
+        
+            .home-logo {
+                width: 70px;
+                height: 13px;
+                background: url(../images/logo.png) center no-repeat;
+                padding: 18px;
+            }
+        
+            .home-nav {
+                display: flex;
+                justify-content: space-between;
+        
+                .home-tab {
+                    display: flex;
+        
+                    .home-tab-item {
+                        background: center no-repeat;
+                        width: 30px;
+                        height: 30px;
+                        cursor: pointer;
+                        margin: 0 15px 20px;
+                    }
+                }
+        
+                .home-menu {
+                    display: flex;
+        
+                    .home-menu-item {
+                        background: center no-repeat;
+                        width: 30px;
+                        height: 30px;
+                        cursor: pointer;
+                        margin: 0 15px 20px;
+                    }
+                }
+            }
+        }
+    }
+
+    .home-half {
+        @media screen and (max-width: 720px) {
+            display: none;
+        }
+    }
+
+    .room-wrapper {
+        flex: 1;
+        min-width: 360px;
+    }
+    
+}

@@ -14,12 +14,6 @@ module.exports = io => {
             // unregistered (new) user
             if(typeof user === 'undefined') {
                 socket.emit('unregistered')
-                socket.on('register', nickname => {
-                    socket.removeAllListeners('register')
-                    const newUser = new User(socket, id, nickname)
-                    lobby.register(newUser)
-                    lobby.join(newUser)
-                })
             }
 
             // already connected user
@@ -37,6 +31,13 @@ module.exports = io => {
                 user.socket = socket
                 lobby.join(user)
             }
+        })
+
+        socket.on('register', (id, nickname) => {
+            socket.removeAllListeners('register')
+            const newUser = new User(socket, id, nickname)
+            lobby.register(newUser)
+            lobby.join(newUser)
         })
     })
 }

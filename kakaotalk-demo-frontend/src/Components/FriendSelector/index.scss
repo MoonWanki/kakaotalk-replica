@@ -1,0 +1,28 @@
+.selector {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba($color: black, $alpha: 0.3);
+    overflow: hidden;
+
+    .selector-inner {
+        position: relative;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        max-width: 500px;
+        background: white;
+        border: 1px solid gray;
+
+        .selector-content {
+            padding: 10px;
+        }
+
+        .selector-actions {
+            display: flex;
+            justify-content: center;
+        }
+    }
+}

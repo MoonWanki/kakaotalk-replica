@@ -20,6 +20,7 @@ class User {
                 id: member.id,
                 nickname: member.nickname,
             })),
+            message: room.message,
         }))
         this.socket.emit('room_status', roomStatus)
     }

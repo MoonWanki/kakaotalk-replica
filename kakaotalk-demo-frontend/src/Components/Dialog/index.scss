@@ -1,4 +1,4 @@
-.modal {
+.dialog {
     position: fixed;
     top: 0;
     left: 0;
@@ -7,24 +7,22 @@
     background: rgba($color: black, $alpha: 0.3);
     overflow: hidden;
 
-    .modal-inner {
-        width: 300px;
-        height: 200px;
+    .dialog-inner {
         position: relative;
         transform: translate(-50%, -50%);
         top: 50%;
         left: 50%;
+        max-width: 300px;
         background: white;
         border: 1px solid gray;
 
-        .modal-content {
-
+        .dialog-content {
+            padding: 10px;
         }
 
-        .modal-actions {
-            display: absolute;
+        .dialog-actions {
+            display: flex;
             justify-content: center;
-            bottom: 0;
         }
     }
 }
