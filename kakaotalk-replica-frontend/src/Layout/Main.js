@@ -67,7 +67,7 @@ export default class Main extends Component {
     }
 
     clearUnread = room => {
-        if(room.messages[room.messages.length-1].unreadIds.includes(this.state.myInfo.id)) {
+        if(room.messages.length > 1 && room.messages[room.messages.length-1].unreadIds.includes(this.state.myInfo.id)) {
             this.socket.emit('read_messages', room.id)
         }
     }

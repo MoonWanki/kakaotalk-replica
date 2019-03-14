@@ -20,7 +20,7 @@ class Room {
         this.members.splice(this.members.findIndex(m => m === user), 1)
         user.roomsIn.splice(user.roomsIn.findIndex(r => r.id === this.id), 1)
         this.addMessage(undefined, 'system', `${user.nickname}님이 방을 나갔습니다.`)
-        console.log(`${user.nickname}님이 방 ${this.id}에서 나갔습니다.`)
+        console.log(`${user.nickname}님이 방 ${this.id.substring(0,8)}에서 나갔습니다.`)
         this.notifyRoomStatusToMembers()
     }
 

@@ -12,7 +12,7 @@ class Lobby {
     }
 
     join(user) {
-        console.log(`${user.nickname}님이 채팅에 접속하였습니다. sid: ${user.socket.id}`)
+        console.log(`${user.nickname}님이 채팅에 접속하였습니다. UID: ${user.id} / SID: ${user.socket.id}`)
         user.isOnline = true
 
         user.socket.on('invite', (roomId, invitedUsers) => this.invite(roomId, user, invitedUsers))
@@ -51,7 +51,7 @@ class Lobby {
             room.join(user)
         })
         room.addMessage(undefined, 'system', `${inviter.nickname}님이 ${invitedUsers.map(u => u.nickname).join(', ')}님을 초대했습니다.`)
-        console.log(`${inviter.nickname}님이 방 ${roomId}에 ${invitedUsers.map(u => u.nickname).join(', ')}님을 초대했습니다.`)
+        console.log(`${inviter.nickname}님이 방 ${roomId.substring(0,8)}에 ${invitedUsers.map(u => u.nickname).join(', ')}님을 초대했습니다.`)
     }
 
     onSendMessage(user, roomId, message) {

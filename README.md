@@ -1,6 +1,6 @@
-# KakaoTalk Demo
+# KakaoTalk Replica
 
-This project is for **Kakaopay recruitment test**.
+This app is for **2019 Kakaopay recruitment test**.
 
 ## Prerequistes
 
@@ -12,21 +12,21 @@ This project is for **Kakaopay recruitment test**.
 #### 1. Clone the project
 
 ```bash
-$ git clone https://github.com/MoonWanki/kakaotalk-demo.git
+$ git clone https://github.com/MoonWanki/kakaotalk-replica.git
 ```
 
 #### 2. Install packages from npm (both in backend & Frontend)
 
 ```bash
-$ cd kakaotalk-demo-backend
+$ cd kakaotalk-replica-backend
 $ yarn
-$ cd ../kakaotalk-demo-frontend
+$ cd ../kakaotalk-replica-frontend
 $ yarn
 ```
 
 #### 3. Check .env files
 
-Both sides consist environment variables that are required for connection.  
+Both sides consist environment variables that are required for the connection.  
 `PORT_NUMBER` should be set to match both sides. Default is `4000`.
 
 - Backend
@@ -42,7 +42,7 @@ REACT_APP_BACKEND_URL=http://localhost:{PORT_NUMBER}
 ## Start Backend Development Server
 
 ```bash
-$ cd kakaotalk-demo-backend
+$ cd kakaotalk-replica-backend
 $ yarn start
 ```
 
@@ -50,6 +50,10 @@ $ yarn start
 
 
 ```bash
-$ cd kakaotalk-demo-frontend
+$ cd kakaotalk-replica-frontend
 $ yarn start
-```
+```  
+
+## Description
+
+준비 중입니다.  
