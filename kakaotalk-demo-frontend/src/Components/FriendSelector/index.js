@@ -25,7 +25,7 @@ export default class FriendSelector extends Component {
                 <div className='selector-inner'>
                     <div className='selector-content'>
                         {this.state.friends.map((friend, idx) => 
-                            <div id={idx} onClick={() => this.onItemClick(idx)}>
+                            <div key={idx} onClick={() => this.onItemClick(idx)}>
                                 {friend.nickname} {friend.isSelected && '(선택됨)'}
                             </div>
                         )}

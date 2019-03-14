@@ -3,20 +3,23 @@
     height: 48px;
     border: 1px solid;
     border-radius: 2px;
+    color: lightgray;
 }
 
 .button-normal {
     background: white;
 }
 
-.button-normal-active:hover {
-    background: lightgray;
+.button-normal-active {
+    color: black;
+    &:hover { background: lightgray; cursor: pointer; }
 }
 
 .button-accent {
     background: yellow;
 }
 
-.button-accent-active:hover {
-    background: gold;
+.button-accent-active {
+    color: black;
+    &:hover { background: gold; cursor: pointer; }
 }

@@ -1,8 +1,8 @@
 .selector {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     background: rgba($color: black, $alpha: 0.3);
     overflow: hidden;

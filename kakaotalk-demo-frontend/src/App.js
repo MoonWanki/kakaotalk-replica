@@ -4,6 +4,12 @@ import Main from 'Layout/Main'
 import Login from 'Layout/Login'
 import Dialog from 'Components/Dialog'
 
+const thumbnailImages = [
+	require('images/thumbnail_1.jpg'), require('images/thumbnail_2.jpg'), require('images/thumbnail_3.jpg'), require('images/thumbnail_4.jpg'),
+	require('images/thumbnail_5.jpg'), require('images/thumbnail_6.jpg'), require('images/thumbnail_7.jpg'), require('images/thumbnail_8.jpg'),
+	require('images/thumbnail_9.jpg'), require('images/thumbnail_10.jpg'), require('images/thumbnail_11.jpg'), require('images/thumbnail_12.jpg'),
+]
+
 class App extends Component {
 
 	state = {
@@ -17,7 +23,7 @@ class App extends Component {
 
 	constructor() {
 		super()
-		this.socket = SocketIOClient(process.env.REACT_APP_BACKEND_URL)
+		this.socket = SocketIOClient(process.env.REACT_APP_BACKEND_URL || 'http://localhost:4000')
 		this.socket.on('unregistered', () => this.setState({ unregisteredModalOpen: true }))
         this.socket.on('already_connected', () => this.setState({ alreadyConnectedModalOpen: true }))
 		this.socket.on('login_success', this.onLoginSuccess)
@@ -25,7 +31,7 @@ class App extends Component {
 	}
 
 	componentDidMount = () => {
-		this.autoLoginIfCookieExist()
+		//this.autoLoginIfCookieExist()
 	}
 	
 	autoLoginIfCookieExist = () => {
@@ -91,6 +97,7 @@ class App extends Component {
 							닉네임을 설정해주세요.
 							<input onChange={e => this.setState({ nickname: e.target.value })} /><br />
 							사용하실 프로필 이미지를 선택해주세요!
+							{thumbnailImages.map(thmb => <div style={{ background: `url${thmb} center no-repeat`}} />)}
 						</div>
 				</Dialog>}
 				

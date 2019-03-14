@@ -26,7 +26,7 @@ $ yarn
 
 #### 3. Check .env files
 
-Both sides consist environment variables that are needed to connection.  
+Both sides consist environment variables that are required for connection.  
 `PORT_NUMBER` should be set to match both sides. Default is `4000`.
 
 - Backend

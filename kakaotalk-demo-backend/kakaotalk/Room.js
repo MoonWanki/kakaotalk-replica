@@ -1,3 +1,5 @@
+const Message = require('./Message')
+
 class Room {
 
     constructor(id) {
@@ -17,13 +19,13 @@ class Room {
     leave(user) {
         this.members.splice(this.members.findIndex(m => m === user), 1)
         user.roomsIn.splice(user.roomsIn.findIndex(r => r.id === this.id), 1)
-        this.addMessage('system', `${user.nickname}님이 방을 나갔습니다.`)
-        console.log(`${user.nickname}님이 방을 나갔습니다.`)
+        this.addMessage(undefined, 'system', `${user.nickname}님이 방을 나갔습니다.`)
+        console.log(`${user.nickname}님이 방 ${this.id}에서 나갔습니다.`)
         this.notifyRoomStatusToMembers()
     }
 
-    addMessage(type, content) {
-        const newMessage = new Message(type, content, this.members.map(member => member.id))
+    addMessage(user, type, content) {
+        const newMessage = new Message(user, type, content, this.members.map(member => member.id))
         this.messages.push(newMessage)
         this.notifyRoomStatusToMembers()
     }
@@ -40,7 +42,9 @@ class Room {
     }
 
     notifyRoomStatusToMembers() {
-        this.members.forEach(m => m.notifyRoomStatus())
+        this.members.forEach(m => {
+            if(m.isOnline) m.notifyRoomStatus()
+        })
     }
 }
 

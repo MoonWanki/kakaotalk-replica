@@ -1,8 +1,9 @@
 class Message {
 
-    constructor(type, content, memberIds) {
+    constructor(user, type, content, memberIds) {
+        this.user = user
         this.type = type
-        this.time = new Date()
+        this.timestamp = new Date()
         this.content = content
         this.unreadIds = memberIds
     }

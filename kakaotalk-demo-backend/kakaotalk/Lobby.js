@@ -16,7 +16,7 @@ class Lobby {
         user.isOnline = true
 
         user.socket.on('invite', (roomId, invitedUsers) => this.invite(roomId, user, invitedUsers))
-        user.socket.on('leave_room', roomId => this.onUserLeaveRoom(user, roomId))
+        user.socket.on('leave_room', roomId => this.onLeaveRoom(user, roomId))
         user.socket.on('send_initial_message', (roomId, message, invitedUsers) => this.onSendInitialMessage(user, roomId, message, invitedUsers))
         user.socket.on('send_message', (roomId, message) => this.onSendMessage(user, roomId, message))
         user.socket.on('read_messages', roomId => this.onReadMessages(user, roomId))
@@ -44,29 +44,24 @@ class Lobby {
         this.leave(user)
     }
 
-    createRoom(owner, roomId, userIds) {
-        const newRoom = new Room(roomId)
-        newRoom.join(owner)
-        this.invite(newRoom.id, owner, userIds)
-    }
-
     invite(roomId, inviter, invitedUsers) {
         const room = inviter.findRoomById(roomId)
         invitedUsers.forEach(u => {
             const user = this.findUserById(u.id)
             room.join(user)
         })
-        room.addMessage('system', `${invitedUsers.map(u => u.nickname).join(', ')}님을 초대했습니다.`)
-        console.log(`${invitedUsers.map(u => u.nickname).join(', ')}님을 초대했습니다.`)
+        room.addMessage(undefined, 'system', `${inviter.nickname}님이 ${invitedUsers.map(u => u.nickname).join(', ')}님을 초대했습니다.`)
+        console.log(`${inviter.nickname}님이 방 ${roomId}에 ${invitedUsers.map(u => u.nickname).join(', ')}님을 초대했습니다.`)
     }
 
     onSendMessage(user, roomId, message) {
         const room = user.findRoomById(roomId)
-        room.addMessage(message.type, message.content)
+        room.addMessage(user, message.type, message.content)
     }
 
     onSendInitialMessage(owner, roomId, message, invitedUsers) {
         const newRoom = new Room(roomId)
+        console.log(`${owner.nickname}님이 새로운 방 ${roomId.substring(0,8)}을 만들었습니다.`)
         newRoom.join(owner)
         this.invite(roomId, owner, invitedUsers)
         this.onSendMessage(owner, roomId, message)
@@ -77,10 +72,13 @@ class Lobby {
         room.messagesReadBy(user)
     }
 
-    onUserLeaveRoom(user, roomId) {
-        const room = user.findRoomById(roomId)
+    onLeaveRoom(user, roomId) {
+        let room = user.findRoomById(roomId)
         room.leave(user)
-        if(room.members.length) room = null // destroy room
+        if(room.members.length===0) {
+            console.log(`모든 멤버가 나간 방 ${room.id.substring(0,8)}을 제거합니다.`)
+            room = null // destroy room
+        }
         user.notifyRoomStatus()
     }
 

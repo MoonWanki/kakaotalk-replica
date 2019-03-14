@@ -37,23 +37,25 @@ export default class Main extends Component {
         this.setState({ rooms })
         if(this.state.roomOpened) {
             const room = rooms.find(r => r.id === this.state.roomOpened.id)
-            this.setState({ roomOpened: room })
-            this.socket.emit('read_messages', room.id)
+            if(room) {
+                this.setState({ roomOpened: room })
+                this.clearUnread(room)
+            }
         }
     }
     
-    // create room
     createRoom = invitedUsers => {
         const emptyRoom = {
             id: uuidv4(),
             members: [this.state.myInfo, ...invitedUsers],
+            messages: [{ type: 'system', content: `${this.state.myInfo.nickname}님이 ${invitedUsers.map(u => u.nickname).join(', ')}님을 초대했습니다.`}],
         }
         this.setState({ friendSelectorOpen: false, roomOpened: emptyRoom })
     }
 
     openRoom = room => {
         this.setState({ roomOpened: room })
-        this.socket.emit('read_messages', room.id)
+        this.clearUnread(room)
     }
 
     closeRoom = () => {
@@ -61,7 +63,13 @@ export default class Main extends Component {
     }
 
     onCreateRoomButtonClick = () => {
-        this.setState({ friendSelectorOpen: true })
+        this.setState({ friendSelectorOpen: true, roomOpened: false })
+    }
+
+    clearUnread = room => {
+        if(room.messages[room.messages.length-1].unreadIds.includes(this.state.myInfo.id)) {
+            this.socket.emit('read_messages', room.id)
+        }
     }
     
     render() {
@@ -83,10 +91,8 @@ export default class Main extends Component {
                     </div>
 
                     {this.state.view===0 ? <FriendList myInfo={this.state.myInfo} friends={this.state.friends} />
-                    : this.state.view===1 ? <RoomList rooms={this.state.rooms} onCreateRoomButtonClick={this.onCreateRoomButtonClick} onRoomClick={this.openRoom} />
+                    : this.state.view===1 ? <RoomList rooms={this.state.rooms} onCreateRoomButtonClick={this.onCreateRoomButtonClick} onRoomDoubleClick={this.openRoom} />
                     : this.state.view===2 ? null : null}
-
-                    {this.state.friendSelectorOpen && <FriendSelector friends={this.state.friends} onSelect={this.createRoom} onCancel={() => this.setState({ friendSelectorOpen: false })}/>}
                 </div>
 
                 {this.state.roomOpened && 
@@ -94,10 +100,13 @@ export default class Main extends Component {
                         <Room
                             socket={this.socket}
                             myInfo={this.state.myInfo}
+                            friends={this.state.friends}
                             room={this.state.roomOpened}
                             onClose={this.closeRoom} />
                     </div>
                 }
+
+                {this.state.friendSelectorOpen && <FriendSelector friends={this.state.friends} onSelect={this.createRoom} onCancel={() => this.setState({ friendSelectorOpen: false })}/>}
             </div>
         )
     }

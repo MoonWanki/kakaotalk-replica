@@ -20,7 +20,10 @@ class User {
                 id: member.id,
                 nickname: member.nickname,
             })),
-            message: room.message,
+            messages: room.messages.map(message => ({
+                ...message,
+                user: message.user ? { id: message.user.id, nickname: message.user.nickname } : undefined,
+            })),
         }))
         this.socket.emit('room_status', roomStatus)
     }
