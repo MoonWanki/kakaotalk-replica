@@ -1,9 +1,17 @@
 require('dotenv').config()
-const PORT = process.env.PORT || 4000
+const path = require('path')
+const http = require('http')
+const express = require('express')
+const socketio = require('socket.io')
 const kakaotalk = require('./kakaotalk')
+const port = process.env.PORT || 4000
 
-const io = require('socket.io').listen(PORT)
+const app = express()
+app.use('/kakaotalk/res', express.static(path.join(__dirname, 'kakaotalk', 'res')))
 
+const server = http.createServer(app)
+server.listen(port, () => console.log(`Server running on ${port}`))
+
+const io = socketio(server)
 kakaotalk(io)
 
-console.log(`Server running on ${PORT}`)

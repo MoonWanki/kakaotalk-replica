@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import './FriendList.scss'
 
 export default class FriendList extends Component {
     render() {

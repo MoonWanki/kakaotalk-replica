@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import Button from 'Components/Button'
+import { Button } from 'Components'
 import produce from 'immer'
-import './index.scss'
+import './FriendSelector.scss'
 
 export default class FriendSelector extends Component {
 

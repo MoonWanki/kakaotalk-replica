@@ -1,4 +1,7 @@
 const Room = require('./Room')
+const ss = require('socket.io-stream')
+const fs = require('fs')
+const path = require('path')
 
 class Lobby {
 
@@ -22,6 +25,7 @@ class Lobby {
         user.socket.on('read_messages', roomId => this.onReadMessages(user, roomId))
         user.socket.on('disconnect', reason => this.leave(user))
         user.socket.on('logout', () => this.leave(user))
+        ss(user.socket).on('send_image', this.onSendImage)
 
         user.socket.emit('login_success', { id: user.id, nickname: user.nickname })
         user.notifyRoomStatus()
@@ -57,6 +61,11 @@ class Lobby {
     onSendMessage(user, roomId, message) {
         const room = user.findRoomById(roomId)
         room.addMessage(user, message.type, message.content)
+    }
+
+    onSendImage(stream, data) {
+        var filename = path.join(__dirname, 'res', data.filename)
+        stream.pipe(fs.createWriteStream(filename))
     }
 
     onSendInitialMessage(owner, roomId, message, invitedUsers) {

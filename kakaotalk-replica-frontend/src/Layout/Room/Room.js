@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import Button from 'Components/Button'
-import FriendSelector from 'Components/FriendSelector'
-import Dialog from 'Components/Dialog'
+import { Button, Dialog, FriendSelector } from 'Components'
+import ss from 'socket.io-stream'
+import uuid from 'uuid/v1'
 import './Room.scss'
 
 export default class Room extends Component {
@@ -15,7 +15,7 @@ export default class Room extends Component {
     }
 
     componentDidMount() {
-        window.onkeypress = e => {
+        window.onkeydown = e => {
             if(e.keyCode === 13 && !e.shiftKey) {
                 this.onSendButtonClick()
                 e.preventDefault()
@@ -63,6 +63,31 @@ export default class Room extends Component {
         this.socket.emit('leave_room', this.props.room.id)
     }
 
+    sendImage = e => {
+        const file = e.target.files[0]
+        if(file && file.type.includes('image')) {
+            const extension = file.name.slice(file.name.lastIndexOf('.'))
+            const stream = ss.createStream()
+            const filename = uuid() + extension
+            ss(this.socket).emit('send_image', stream, { filename })
+            const blobStream = ss.createBlobReadStream(file)
+            let sizeUploaded = 0
+            blobStream.on('data', chunk => {
+                sizeUploaded += chunk.length
+                if(sizeUploaded === file.size) {
+                    this.sendMessage({
+                        type: 'image',
+                        content: filename,
+                    })
+                }
+            })
+            blobStream.pipe(stream)  
+        }
+        else {
+            console.log('not image')
+        }
+    }
+
     renderMessages = () => {
         return this.props.room.messages.map((message, i) => {
             if(message.type === 'system') {
@@ -73,17 +98,21 @@ export default class Room extends Component {
                 )
             }
             else {
-                if(message.user.id === this.props.myInfo.id) {
+                if(message.user.id === this.props.myInfo.id) { // my message
                     return (
                         <div key={i} className='room-chat-message'>
-                            {message.content}
+                            {message.type === 'text'
+                                ? message.content
+                                : <img width={240} src={`${process.env.REACT_APP_BACKEND_URL}/kakaotalk/res/${message.content}`} alt='image_message' />}
                         </div>
                     )
                 }
-                else {
+                else { // other's message
                     return (
                         <div key={i} className='room-chat-message'>
-                            {message.content}
+                            {message.type === 'text'
+                                ? message.content
+                                : <img width={240} src={`${process.env.REACT_APP_BACKEND_URL}/kakaotalk/res/${message.content}`} alt='image_message' />}
                         </div>
                     )
                 }   
@@ -111,6 +140,7 @@ export default class Room extends Component {
                 <div className='room-textfield'>
                     <textarea onChange={e => this.setState({ text: e.target.value })} value={this.state.text} />
                     <Button accent onClick={this.onSendButtonClick} disabled={!this.state.text.length}>전송</Button>
+                    <input type='file' onChange={this.sendImage} accept='image/*' />사진보내기
                 </div>
 
                 {this.state.friendSelectorOpen && <FriendSelector friends={this.props.friends} onSelect={this.invite} onCancel={() => this.setState({ friendSelectorOpen: false })}/>}

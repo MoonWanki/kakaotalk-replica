@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Button from 'Components/Button'
-import './index.scss'
+import { Button } from 'Components'
+import './Dialog.scss'
 
 export default class Dialog extends Component {
 

@@ -4,8 +4,8 @@ This app is for **2019 Kakaopay recruitment test**.
 
 ## Prerequistes
 
-- Node.js v8^
-- yarn
+- [Node.js v8^](https://nodejs.org)
+- [yarn](https://yarnpkg.com/en/docs/install)
 
 ## Installation
 

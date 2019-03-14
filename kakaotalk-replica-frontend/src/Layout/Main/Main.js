@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import uuidv4 from 'uuid/v4'
+import uuid from 'uuid/v1'
+import { FriendList, RoomList, Room  } from 'Layout'
+import { FriendSelector } from 'Components'
 import './Main.scss'
-import RoomList from './RoomList'
-import FriendList from './FriendList'
-import Room from './Room'
-import FriendSelector from 'Components/FriendSelector'
 
 export default class Main extends Component {
 
@@ -46,7 +44,7 @@ export default class Main extends Component {
     
     createRoom = invitedUsers => {
         const emptyRoom = {
-            id: uuidv4(),
+            id: uuid(),
             members: [this.state.myInfo, ...invitedUsers],
             messages: [{ type: 'system', content: `${this.state.myInfo.nickname}님이 ${invitedUsers.map(u => u.nickname).join(', ')}님을 초대했습니다.`}],
         }

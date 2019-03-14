@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import './RoomList.scss'
 
 export default class RoomList extends Component {
 
