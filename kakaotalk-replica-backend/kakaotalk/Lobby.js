@@ -11,7 +11,7 @@ class Lobby {
 
     register(user) {
         this.users.push(user)
-        this.users.forEach(user => this.notifyUserStatusTo(user))
+        this.users.forEach(user => { if(user.isOnline) this.notifyUserStatusTo(user) })
     }
 
     join(user) {
@@ -27,18 +27,24 @@ class Lobby {
         user.socket.on('logout', () => this.leave(user))
         ss(user.socket).on('send_image', this.onSendImage)
 
-        user.socket.emit('login_success', { id: user.id, nickname: user.nickname })
+        user.socket.emit('login_success', { id: user.id, nickname: user.nickname, thumbnail: user.thumbnail })
         user.notifyRoomStatus()
         this.notifyUserStatusTo(user)                                                                                                                                                                                                                                                                                                                                 
     }
 
     leave(user) {
         user.isOnline = false
-        user.socket.removeAllListeners('create_room')
-        user.socket.removeAllListeners('leave_room')
+        
         user.socket.removeAllListeners('invite')
+        user.socket.removeAllListeners('leave_room')
+        user.socket.removeAllListeners('send_initial_message')
+        user.socket.removeAllListeners('send_message')
+        user.socket.removeAllListeners('read_messages')
         user.socket.removeAllListeners('disconnect')
         user.socket.removeAllListeners('logout')
+        ss(user.socket).off('send_image', this.onSendImage)
+
+        user.socket.emit('logout_success')
         user.socket = null
         console.log(`${user.nickname}님이 채팅을 종료하였습니다.`)
     }
@@ -95,6 +101,7 @@ class Lobby {
         const userStatus = this.users.map(user => ({
             id: user.id,
             nickname: user.nickname,
+            thumbnail: user.thumbnail,
         }))
         user.socket.emit('user_status', userStatus)
     }

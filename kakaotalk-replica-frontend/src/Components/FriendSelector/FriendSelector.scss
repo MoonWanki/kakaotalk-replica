@@ -1,28 +1,30 @@
-.selector {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: rgba($color: black, $alpha: 0.3);
-    overflow: hidden;
+.invitable-user-list {
+    width: 280px;
+    height: 360px;
+    overflow-y: scroll;
 
-    .selector-inner {
-        position: relative;
-        transform: translate(-50%, -50%);
-        top: 50%;
-        left: 50%;
-        max-width: 500px;
-        background: white;
-        border: 1px solid gray;
+    .invitable-user {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
 
-        .selector-content {
-            padding: 10px;
+        &:hover {
+            background: #f8f8f8;
         }
 
-        .selector-actions {
+        .invitable-user-profile {
             display: flex;
-            justify-content: center;
+            align-items: center;
+            padding: 4px;
+        }
+
+        .invitable-user-selected {
+            width: 16px;
+            height: 16px;
+            margin-right: 12px;
+            border: 1px solid lightgray;
+            border-radius: 8px
         }
     }
 }

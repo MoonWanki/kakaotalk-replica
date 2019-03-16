@@ -3,7 +3,10 @@
     height: 100vh;
     
     .home {
+        position: relative;
         flex: 1;
+        display: flex;
+        flex-direction: column;
 
         .home-header {
             background: #423630;
@@ -11,7 +14,7 @@
             .home-logo {
                 width: 70px;
                 height: 13px;
-                background: url(../../images/logo.png) center no-repeat;
+                background: url(../../images/title.png) center no-repeat;
                 padding: 18px;
             }
         
@@ -42,6 +45,51 @@
                         margin: 0 15px 20px;
                     }
                 }
+            }
+        }
+
+        .search {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            border-bottom: 1px solid lightgray;
+        
+            .search-icon {
+                width: 24px;
+                height: 16px;
+                background: url(../../images/search_icon.png) center no-repeat;
+                background-size: contain;
+                opacity: 0.5;
+            }
+        
+            .search-textbox {
+                flex: auto;
+        
+                *:focus { outline: none; }
+        
+                input {
+                    width: 80%;
+                    height: auto;
+                    line-height: normal;
+                    padding: 8px;
+                    border: transparent;
+                    font-size: 12px;
+                }
+            }
+        
+            .search-cancel-icon {
+                width: 22px;
+                height: 16px;
+                background: url(../../images/cancel_icon.png) center no-repeat;
+                background-size: contain;
+                opacity: 0;
+            }
+        
+            .search-cancel-icon-active {
+                opacity: 0.5;
+                cursor: pointer;
+                &:hover { opacity: 0.3; }
             }
         }
     }

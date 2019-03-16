@@ -1,4 +1,111 @@
 .room {
+    position: relative;
+    display: flex;
+    flex-direction: column;
     background: #b3c8db;
     height: 100vh;
+
+    .room-header {
+        display: flex;
+        padding: 12px 8px;
+        background: rgba($color: black, $alpha: 0.05);
+        border-bottom: 1px solid rgba($color: black, $alpha: 0.07);
+
+        .room-header-content {
+            display: flex;
+            flex-direction: column;
+            flex: auto;
+            justify-content: space-around;
+
+            .room-header-content-row {
+                display: flex;
+                justify-content: space-between;
+
+                .room-title {
+                    flex: auto;
+                }
+
+                .room-menu-button {
+                    width: 24px;
+                    height: 18px;
+                    cursor: pointer;
+                    opacity: 0.5;
+                    background: no-repeat center;
+                    background-size: contain;
+
+                    &:hover {
+                        opacity: 0.8;
+                    }
+                }
+
+                .room-invite-button {
+                    background-image: url(../../images/invite_icon.png);
+                }
+
+                .room-leave-button {
+                    margin-right: 8px;
+                    background-image: url(../../images/leave_icon.png);
+                }
+                .room-close-button {
+                    background-image: url(../../images/close_icon.png);
+                }
+            }
+        }
+    }
+
+    .room-scroller {
+        flex: auto;
+        overflow-y: scroll;
+        padding: 0 16px;
+    }
+
+    .room-footer {
+        background: white;
+        height: 140px;
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        border-top: 1px solid rgba($color: black, $alpha: 0.07);
+
+        .room-form {
+            display: flex;
+
+            .room-textarea {
+                flex: auto;
+                height: 100px;
+
+                textarea {
+                    width: 100%;
+                    height: 100%;
+                    border: transparent;
+                    resize: none;
+
+                    &:focus { outline: none; }
+                }
+            }
+        }
+
+        .room-form-menu {
+            flex: auto;
+            display: flex;
+            align-items: center;
+
+            .image-upload-button {
+                width: 20px;
+                height: 20px;
+                background: url(../../images/image_icon.png) center no-repeat;
+                filter: grayscale(100%);
+        
+                &:hover {
+                    filter: none;
+                }
+                .room-upload-input {
+                    width: 100%;
+                    height: 100%;
+                    filter: alpha(opacity=0);
+                    opacity: 0;
+                }
+            }
+        } 
+    }
 }

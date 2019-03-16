@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Button, Dialog, FriendSelector } from 'Components'
+import { Button, Dialog, FriendSelector, Thumbnail } from 'Components'
+import Message from './Message'
 import ss from 'socket.io-stream'
 import uuid from 'uuid/v1'
 import './Room.scss'
@@ -24,11 +25,13 @@ export default class Room extends Component {
     }
 
     onSendButtonClick = () => {
-        this.sendMessage({
-            type: 'text',
-            content: this.state.text,
-        })
-        this.setState({ text: '' })
+        if(this.state.text.trim().length) {
+            this.sendMessage({
+                type: 'text',
+                content: this.state.text,
+            })
+            this.setState({ text: '' })
+        }
     }
 
     componentWillUnmount() {
@@ -88,69 +91,65 @@ export default class Room extends Component {
         }
     }
 
-    renderMessages = () => {
-        return this.props.room.messages.map((message, i) => {
-            if(message.type === 'system') {
-                return (
-                    <div key={i} className='room-chat-message'>
-                        {message.content}
-                    </div>
-                )
-            }
-            else {
-                if(message.user.id === this.props.myInfo.id) { // my message
-                    return (
-                        <div key={i} className='room-chat-message'>
-                            {message.type === 'text'
-                                ? message.content
-                                : <img width={240} src={`${process.env.REACT_APP_BACKEND_URL}/kakaotalk/res/${message.content}`} alt='image_message' />}
-                        </div>
-                    )
-                }
-                else { // other's message
-                    return (
-                        <div key={i} className='room-chat-message'>
-                            {message.type === 'text'
-                                ? message.content
-                                : <img width={240} src={`${process.env.REACT_APP_BACKEND_URL}/kakaotalk/res/${message.content}`} alt='image_message' />}
-                        </div>
-                    )
-                }   
-            }
-        })
-    }
-
     render() {
+
+        const unvisitedFriends = this.props.friends.filter(f => !this.props.room.members.find(m => m.id===f.id))
+        const { room } = this.props
         return (
             <div className='room'>
+
                 <div className='room-header'>
-                    <div onClick={() => this.setState({ friendSelectorOpen: true })}>친구 초대</div>
-                    <div onClick={this.props.onClose}>닫기</div>
-                    <div onClick={this.onLeaveButtonClick}>채팅방 나가기</div>
+                    <Thumbnail type={100} round />&emsp;
+                    <div className='room-header-content'>
+                        <div className='room-header-content-row'>
+                            <div className='room-title'><b>{room.members.map(m => m.nickname).join(', ')} <span style={{ color: 'gray' }}>({room.members.length})</span></b></div>
+                            <div title='채팅방 나가기' className='room-menu-button room-leave-button' onClick={this.onLeaveButtonClick} />
+                            <div title='닫기' className='room-menu-button room-close-button' onClick={this.props.onClose} />
+                        </div>
+                        <div className='room-header-content-row'>
+                            <div title='대화상대 초대' className='room-menu-button room-invite-button' onClick={() => this.setState({ friendSelectorOpen: true })} />
+                        </div>
+                    </div>
                 </div>
 
-                <hr />
-
-                <div className='room-chat'>
-                    {this.renderMessages()}
+                <div className='room-scroller'>
+                    {this.props.room.messages.map((message, i) =>
+                        <Message
+                            key={i}
+                            type={message.type}
+                            content={message.content}
+                            user={message.user}
+                            unreadIds={message.unreadIds}
+                            timestamp={message.timestamp}
+                            isMine={message.type!=='system' ? (message.user.id === this.props.myInfo.id) : undefined} />)}
                 </div>
 
-                <hr />
-
-                <div className='room-textfield'>
-                    <textarea onChange={e => this.setState({ text: e.target.value })} value={this.state.text} />
-                    <Button accent onClick={this.onSendButtonClick} disabled={!this.state.text.length}>전송</Button>
-                    <input type='file' onChange={this.sendImage} accept='image/*' />사진보내기
+                <div className='room-footer'>
+                    <div className='room-form'>
+                        <div className='room-textarea'>
+                            <textarea onChange={e => this.setState({ text: e.target.value })} value={this.state.text} />
+                        </div>
+                        <Button accent onClick={this.onSendButtonClick} disabled={!this.state.text.trim().length}>전송</Button>
+                    </div>
+                    <div className='room-form-menu'>
+                        <div title='사진 전송' className='image-upload-button'>
+                            <input className='room-upload-input' type='file' onChange={this.sendImage} accept='image/*' />
+                        </div>
+                    </div> 
                 </div>
 
-                {this.state.friendSelectorOpen && <FriendSelector friends={this.props.friends} onSelect={this.invite} onCancel={() => this.setState({ friendSelectorOpen: false })}/>}
+                {this.state.friendSelectorOpen &&
+                    <FriendSelector
+                        friends={unvisitedFriends}
+                        onSelectFinish={this.invite}
+                        onCancel={() => this.setState({ friendSelectorOpen: false })}/>}
                 
-                {this.state.leaveDialogOpen && <Dialog
-					okText='확인' onOk={this.leave}
-					cancelText='취소' onCancel={() => this.setState({ leaveDialogOpen: false })}>
-						<div>
-							정말 채팅방에서 나가시겠습니까?
-						</div>
+                {this.state.leaveDialogOpen && <Dialog>
+					<div className='dialog-content' autoFocus>정말 채팅방을 나가시겠습니까?</div>
+					<div className='dialog-actions'>
+						<span style={{ margin: 4 }}><Button onClick={this.leave} accent>확인</Button></span>
+						<span style={{ margin: 4 }}><Button onClick={() => this.setState({ leaveDialogOpen: false })}>취소</Button></span>
+					</div>
 				</Dialog>}
             </div>
         )

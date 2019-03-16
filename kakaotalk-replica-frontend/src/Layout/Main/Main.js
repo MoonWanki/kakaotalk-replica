@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import uuid from 'uuid/v1'
-import { FriendList, RoomList, Room  } from 'Layout'
-import { FriendSelector } from 'Components'
+import { FriendList, RoomList, Room } from 'Layout'
+import { Dialog, Button } from 'Components'
 import './Main.scss'
 
 export default class Main extends Component {
@@ -12,7 +12,8 @@ export default class Main extends Component {
         rooms: [],
         roomOpened: null,
         friendSelectorOpen: false,
-        myInfo: this.props.myInfo
+        myInfo: this.props.myInfo,
+        logoutDialogOpen: false,
     }
 
     socket = this.props.socket
@@ -61,13 +62,19 @@ export default class Main extends Component {
     }
 
     onCreateRoomButtonClick = () => {
-        this.setState({ friendSelectorOpen: true, roomOpened: false })
+        this.setState({ friendSelectorOpen: true })
     }
 
     clearUnread = room => {
         if(room.messages.length > 1 && room.messages[room.messages.length-1].unreadIds.includes(this.state.myInfo.id)) {
             this.socket.emit('read_messages', room.id)
         }
+    }
+
+    logout = () => {
+        this.setState({ logoutDialogOpen: false })
+        this.socket.emit('logout')
+        document.cookie = 'kakaotalk_id=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
     }
     
     render() {
@@ -78,18 +85,18 @@ export default class Main extends Component {
                         <div className='home-logo' />
                         <div className='home-nav'>
                             <div className='home-tab'>
-                                <div onClick={() => this.setState({ view: 0 })} className='home-tab-item' style={{ backgroundImage: `url(${require('images/tab_icon_1.png')})`}} />
-                                <div onClick={() => this.setState({ view: 1 })} className='home-tab-item' style={{ backgroundImage: `url(${require('images/tab_icon_2.png')})`}} />
-                                <div onClick={() => this.setState({ view: 2 })} className='home-tab-item' style={{ backgroundImage: `url(${require('images/tab_icon_3.png')})`}} />
+                                <div title='유저' onClick={() => this.setState({ view: 0 })} className='home-tab-item' style={{ backgroundImage: `url(${require('images/tab_icon_1.png')})`}} />
+                                <div title='채팅' onClick={() => this.setState({ view: 1 })} className='home-tab-item' style={{ backgroundImage: `url(${require('images/tab_icon_2.png')})`}} />
+                                <div title='더보기' onClick={() => this.setState({ view: 2 })} className='home-tab-item' style={{ backgroundImage: `url(${require('images/tab_icon_3.png')})`}} />
                             </div>
                             <div className='home-menu'>
-                                <div onClick={this.props.onLogout} className='home-menu-item' style={{ backgroundImage: `url(${require('images/tab_icon_1.png')})`}} />
+                                <div title='로그아웃' onClick={() => this.setState({ logoutDialogOpen: true })} className='home-menu-item' style={{ backgroundImage: `url(${require('images/icon_exit.png')})`}} />
                             </div>
                         </div>
                     </div>
 
                     {this.state.view===0 ? <FriendList myInfo={this.state.myInfo} friends={this.state.friends} />
-                    : this.state.view===1 ? <RoomList rooms={this.state.rooms} onCreateRoomButtonClick={this.onCreateRoomButtonClick} onRoomDoubleClick={this.openRoom} />
+                    : this.state.view===1 ? <RoomList friends={this.state.friends} rooms={this.state.rooms} onCreateRoom={this.createRoom} onRoomClick={this.openRoom} />
                     : this.state.view===2 ? null : null}
                 </div>
 
@@ -104,7 +111,15 @@ export default class Main extends Component {
                     </div>
                 }
 
-                {this.state.friendSelectorOpen && <FriendSelector friends={this.state.friends} onSelect={this.createRoom} onCancel={() => this.setState({ friendSelectorOpen: false })}/>}
+                {/* {this.state.friendSelectorOpen && <FriendSelector friends={this.state.friends} onSelect={this.createRoom} onCancel={() => this.setState({ friendSelectorOpen: false })}/>} */}
+            
+                {this.state.logoutDialogOpen && <Dialog>
+                    <div className='dialog-content' autoFocus>정말 로그아웃하시겠습니까?</div>
+					<div className='dialog-actions'>
+						<span style={{ margin: 4 }}><Button onClick={this.logout} accent>확인</Button></span>
+						<span style={{ margin: 4 }}><Button onClick={() => this.setState({ logoutDialogOpen: false })}>취소</Button></span>
+					</div>
+				</Dialog>}
             </div>
         )
     }

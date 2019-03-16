@@ -1,0 +1,52 @@
+.system-message {
+    width: 100%;
+    box-sizing: border-box;
+
+    p {
+        background: rgba($color: black, $alpha: 0.05);
+        text-align: center;
+        padding: 4px 0;
+    }
+}
+
+.message {
+    display: flex;
+    padding: 8px 4px;
+
+    .message-body {
+        flex: auto;
+        display: flex;
+        flex-direction: column;
+
+        .message-info {
+            flex: auto;
+            display: flex;
+
+            .message-content {
+                margin-top: 4px;
+                padding: 6px 8px;
+                border-radius: 2px;
+            }
+
+            img {
+                max-width: 240px;
+            }
+
+            .message-metadata {
+
+                display: flex;
+                flex-direction: column-reverse;
+
+                .message-timestamp {
+                    font-size: 11px;
+                    color: gray;
+                }
+
+                .message-unread {
+                    font-size: 11px;
+                    color: #ffea2d;
+                }
+            }
+        }
+    }
+}

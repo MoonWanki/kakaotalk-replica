@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button } from 'Components'
+import { Button, Dialog, Thumbnail } from 'Components'
 import produce from 'immer'
 import './FriendSelector.scss'
 
@@ -9,8 +9,8 @@ export default class FriendSelector extends Component {
         friends: this.props.friends.map(friend => ({ ...friend, isSelected: false }))
     }
 
-    onSelect = () => {
-        this.props.onSelect(this.state.friends.filter(friend => friend.isSelected).map(friend => ({ id: friend.id, nickname: friend.nickname })))
+    onSelectFinish = () => {
+        this.props.onSelectFinish(this.state.friends.filter(friend => friend.isSelected).map(friend => ({ id: friend.id, nickname: friend.nickname })))
     }
 
     onItemClick = idx => {
@@ -20,22 +20,29 @@ export default class FriendSelector extends Component {
     }
 
     render() {
+
+        const selectedFriends = this.state.friends.filter(f => f.isSelected)
         return (
-            <div className='selector'>
-                <div className='selector-inner'>
-                    <div className='selector-content'>
+            <Dialog>
+                <div className='dialog-content' autoFocus>
+                    <div style={{ marginBottom: 8 }}>대화상대 초대&emsp;{selectedFriends.length>0 && <b>{selectedFriends.length}</b>}</div>
+                    <div className='invitable-user-list'>
                         {this.state.friends.map((friend, idx) => 
-                            <div key={idx} onClick={() => this.onItemClick(idx)}>
-                                {friend.nickname} {friend.isSelected && '(선택됨)'}
+                            <div key={idx} className='invitable-user' onClick={() => this.onItemClick(idx)}>
+                                <div className='invitable-user-profile'>
+                                    <Thumbnail type={friend.thumbnail} round />&emsp;{friend.nickname}
+                                </div>
+                                <div className='invitable-user-selected' style={{ background: friend.isSelected ? '#ffea2d' : null}}>
+                                </div>
                             </div>
                         )}
                     </div>
-                    <div className='selector-actions'>
-                        <Button onClick={this.onSelect} accent>확인</Button>
-                        <Button onClick={this.props.onCancel}>취소</Button>
-                    </div>
                 </div>
-            </div>
+                <div className='dialog-actions'>
+                    <span style={{ margin: 4 }}><Button onClick={this.onSelectFinish} accent disabled={this.state.friends.every(f => !f.isSelected)}>확인</Button></span>
+                    <span style={{ margin: 4 }}><Button onClick={this.props.onCancel}>취소</Button></span>
+                </div>
+            </Dialog>
         )
     }
 }

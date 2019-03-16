@@ -1,9 +1,10 @@
 class User {
 
-    constructor(socket, id, nickname) {
+    constructor(socket, id, nickname, thumbnail) {
         this.socket = socket
         this.id = id
         this.nickname = nickname
+        this.thumbnail = thumbnail
         this.isOnline = false
 
         this.roomsIn = new Array()
@@ -19,10 +20,15 @@ class User {
             members: room.members.map(member => ({
                 id: member.id,
                 nickname: member.nickname,
+                thumbnail: member.thumbnail,
             })),
             messages: room.messages.map(message => ({
                 ...message,
-                user: message.user ? { id: message.user.id, nickname: message.user.nickname } : undefined,
+                user: message.user ? {
+                    id: message.user.id,
+                    nickname: message.user.nickname,
+                    thumbnail: message.user.thumbnail
+                } : undefined,
             })),
         }))
         this.socket.emit('room_status', roomStatus)

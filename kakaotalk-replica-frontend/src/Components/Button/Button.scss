@@ -1,25 +1,44 @@
 .button {
-    width: 70px;
-    height: 48px;
     border: 1px solid;
     border-radius: 2px;
-    color: lightgray;
+    display: table;
+    cursor: default;
+
+    .button-content {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+    }
 }
 
 .button-normal {
     background: white;
+    border-color: #d7d7d7;
+    color: lightgray;
 }
 
 .button-normal-active {
     color: black;
-    &:hover { background: lightgray; cursor: pointer; }
+    cursor: pointer;
+
+    &:hover {
+        background: #f8f8f8;
+        border-color: #dcdcdc;
+    }
 }
 
 .button-accent {
-    background: yellow;
+    background: #ffea2d;
+    border-color: #e5ca6b;
+    color: #daba60;
 }
 
 .button-accent-active {
     color: black;
-    &:hover { background: gold; cursor: pointer; }
+    cursor: pointer;
+
+    &:hover {
+        background: #f8e022;
+        border-color: #daba60;
+    }
 }

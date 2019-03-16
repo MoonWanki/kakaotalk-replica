@@ -1,4 +1,5 @@
 .login {
+    position: relative;
     width: 100vw;
     height: 100vh;
     background: #f8f8f8;
@@ -6,10 +7,122 @@
     .login-box {
         position: relative;
         transform: translate(-50%, -50%);
-        top: 50%;
+        top: 45%;
         left: 50%;
-        width: 300px;
-        height: 500px;
-        background: white;
+        width: 360px;
+        height: 420px;
+        background: #ffea2d;
+        border: 1px solid #e5ca6b;
+        border-radius: 2px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0px 0px 8px -2px rgba($color: black, $alpha: 0.3);
+        z-index: 1;
+
+        .login-logo {
+            width: 107px;
+            height: 100px;
+            background: url(../../images/logo.png) center no-repeat;
+            margin-top: 76px;
+        }
+
+        .login-form {
+            width: 240px;
+            margin-top: 24px;
+
+            .login-textbox {
+                width: 100%;
+
+                input {
+                    width: 220px;
+                    height: 24px;
+                    line-height: normal;
+                    padding: 10px;
+                    border: 1px solid #e5ca5b;
+                    border-radius: 2px;
+                }
+            }
+
+            .login-button {
+                width: 100%;
+                height: 40px;
+                background: #f8f8f8;
+                border: 1px solid #e5ca6b;
+                border-radius: 2px;
+                color: lightgray;
+                text-align: center;
+                margin-top: 4px;
+                cursor: default;
+            }
+
+            .login-button-active {
+                background: #423630;
+                color: white;
+                border-color: #322620;
+                cursor: pointer;
+                &:hover {
+                    background: #5b4f48;
+                }
+            }
+
+            .login-autologin {
+                display: flex;
+                margin-top: 6px;
+                align-items: center;
+
+                input {
+                    margin: 0;
+                }
+            }
+        }
+
     }
+
+    .login-ryan {
+        width: 100vw;
+        height: 200px;
+        position: absolute;
+        bottom: 0;
+        background: url(../../images/ryan.png) center no-repeat;
+        background-size: contain
+    }
+
+    .nickname-textbox {
+        width: 100%;
+        margin: 8px 0;
+
+        input {
+            width: 280px;
+            height: auto;
+            line-height: normal;
+            padding: 10px;
+            border: 1px solid #cecece;
+            border-radius: 2px;
+        }
+    }
+
+    .register-thumbnail {
+        position: relative;
+        background: lightgray center no-repeat;
+        background-size: cover;
+        width: 72px;
+        height: 72px;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.8;
+        }
+        
+        .register-thumbnail-selected {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 66px;
+            height: 66px;
+            border: 4px solid black;
+        }
+    }
+
+
 }

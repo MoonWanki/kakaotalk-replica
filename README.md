@@ -57,3 +57,26 @@ $ yarn start
 ## Description
 
 준비 중입니다.  
+
+## Dependencies  
+
+- **React** | https://reactjs.org  
+Top 1 Front-End framework  
+
+- **Socket<span>.</span>IO** | https://socket.io  
+Provide real-time communication between server and clients  
+
+- **Socket.IO-stream** | https://github.com/nkzawa/socket.io-stream | by Naoyuki Kanezawa  
+Enable file streaming via socket<span>.</span>io  
+
+- **Express** | https://expressjs.com  
+For serving static files  
+
+- **Immer** | https://github.com/mweststrate/immer  
+Create immutable state by mutating the current one  
+
+- **uuid** | https://github.com/kelektiv/node-uuid  
+Generate RFC-compliant UUIDs
+
+- **Jest** | https://jestjs.io  
+Unit testing framework  
