@@ -24,6 +24,7 @@
         }
 
         .roomlist-item-content {
+            flex: auto;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -32,6 +33,20 @@
             p {
                 margin: 4px 0;
             }
+
+            .roomlist-item-title {
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        .roomlist-item-metadata {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            height: 56px;
+            font-size: 11px;
+            color: lightgray;
         }
     }
 }

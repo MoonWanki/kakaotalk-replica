@@ -21,28 +21,20 @@ export default class RoomList extends Component {
         this.props.onCreateRoom(users)
     }
 
-    renderRoomItem = () => {
-        return this.props.rooms.map((room, i) => {
-            const userMessages = room.messages.filter(msg => msg.type!=='system')
-            const lastMessage = userMessages[userMessages.length - 1]
-            return <div key={i} onDoubleClick={() => this.props.onRoomDoubleClick(room)}>
-                {room.members.map(member => member.nickname).join(', ')}
-                <br/>
-                {lastMessage && (lastMessage.type==='text' ? lastMessage.content : '사진')}
-            </div>
-        })
-    }
-
     render() {
         let { rooms } = this.props
         rooms.sort((a, b) => {
-            const timeA = a.messages[a.messages.length-1].timestamp
-            const timeB = b.messages[b.messages.length-1].timestamp
-            return timeA < timeB ? 1 : timeA > timeB ? -1 : 0
+            if(a.messages.length && b.messages.length) {
+                const timeA = a.messages[a.messages.length-1].timestamp
+                const timeB = b.messages[b.messages.length-1].timestamp
+                return timeA < timeB ? 1 : timeA > timeB ? -1 : 0
+            }
+            else return 0
         })
         if(this.state.isSearching) {
             rooms = rooms.filter(room => room.members.map(m => m.nickname).join().includes(this.state.searchText))
         }
+
         return (
             <div className='roomlist'>
 
@@ -56,12 +48,17 @@ export default class RoomList extends Component {
 
                 {rooms.map((room, i) => {
                     const userMessages = room.messages.filter(msg => msg.type!=='system')
-                    const lastMessage = userMessages.length ? userMessages[userMessages.length-1] : null
+                    const lastMessage = userMessages.length ? userMessages[userMessages.length-1] : undefined
+
                     return <div key={i} className='roomlist-item' onClick={() => this.props.onRoomClick(room)}>
                         <Thumbnail type={100} round />&emsp;
                         <div className='roomlist-item-content'>
                             <p><b>{room.members.map(m => m.nickname).join(', ')}&nbsp;&nbsp;<span style={{ color: '#bcbcbc' }}>{room.members.length}</span></b></p>
                             <p>{lastMessage ? lastMessage.type === 'text' ? lastMessage.content.length > 20 ? lastMessage.content.substring(0, 20)+'...' : lastMessage.content : '사진' : ''}</p>
+                        </div>
+                        <div className='roomlist-item-metadata'>
+                            <span style={{ marginBottom: 6 }}>{lastMessage && new Date(lastMessage.timestamp).toLocaleTimeString() }</span>
+                            {room.unreadCount > 0 && <div className='room-unread'>{room.unreadCount}</div>}
                         </div>
                     </div>
                 })}

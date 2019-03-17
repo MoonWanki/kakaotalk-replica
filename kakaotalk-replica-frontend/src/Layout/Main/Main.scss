@@ -31,21 +31,39 @@
                         height: 30px;
                         cursor: pointer;
                         margin: 0 15px 20px;
+                        opacity: 0.5;
+
+                        &:hover {
+                            opacity: 0.8;
+                        }
                     }
-                }
-        
-                .home-menu {
-                    display: flex;
-        
-                    .home-menu-item {
-                        background: center no-repeat;
-                        width: 30px;
-                        height: 30px;
-                        cursor: pointer;
-                        margin: 0 15px 20px;
+
+                    .home-tab-item-selected {
+                        opacity: 1;
+                        &:hover { opacity: 1; }
                     }
                 }
             }
+        }
+        
+        .room-unread {
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            background: #f74b31;
+            color: white;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .room-unread-global {
+            position: absolute;
+            top: 46px;
+            left: 92px;
+            z-index: 200;
         }
 
         .search {
@@ -90,6 +108,27 @@
                 opacity: 0.5;
                 cursor: pointer;
                 &:hover { opacity: 0.3; }
+            }
+        }
+
+        .info-box {
+            display: flex;
+            flex-direction: column;
+            align-self: center;
+            align-items: center;
+            justify-content: center;
+            flex: auto;
+
+            .info-logo {
+                width: 100px;
+                height: 100px;
+                background: url(../../images/logo_full.png) center no-repeat / cover;
+            }
+                        
+            a {
+                text-decoration: none;
+                color: #757575;
+                margin-bottom: 4px;
             }
         }
     }

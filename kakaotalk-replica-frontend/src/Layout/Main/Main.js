@@ -78,6 +78,14 @@ export default class Main extends Component {
     }
     
     render() {
+
+        let totalUnreadCount = 0
+        const rooms = this.state.rooms.map(room => {
+            const unreadCount = room.messages.filter(msg => msg.type!=='system' && msg.unreadIds.includes(this.props.myInfo.id)).length
+            totalUnreadCount += unreadCount
+            return { ...room, unreadCount }
+        })
+
         return (
             <div className='main'>
                 <div className={`home${this.state.roomOpened ? ' home-half' : ''}`}>
@@ -85,19 +93,28 @@ export default class Main extends Component {
                         <div className='home-logo' />
                         <div className='home-nav'>
                             <div className='home-tab'>
-                                <div title='유저' onClick={() => this.setState({ view: 0 })} className='home-tab-item' style={{ backgroundImage: `url(${require('images/tab_icon_1.png')})`}} />
-                                <div title='채팅' onClick={() => this.setState({ view: 1 })} className='home-tab-item' style={{ backgroundImage: `url(${require('images/tab_icon_2.png')})`}} />
-                                <div title='더보기' onClick={() => this.setState({ view: 2 })} className='home-tab-item' style={{ backgroundImage: `url(${require('images/tab_icon_3.png')})`}} />
+                                <div title='유저' onClick={() => this.setState({ view: 0 })} className={`home-tab-item${this.state.view===0 ? ' home-tab-item-selected':''}`} style={{ backgroundImage: `url(${require('images/tab_icon_1.png')})`}} />
+                                <div title='채팅' onClick={() => this.setState({ view: 1 })} className={`home-tab-item${this.state.view===1 ? ' home-tab-item-selected':''}`} style={{ backgroundImage: `url(${require('images/tab_icon_2.png')})`}} />
+                                <div title='더보기' onClick={() => this.setState({ view: 2 })} className={`home-tab-item${this.state.view===2 ? ' home-tab-item-selected':''}`} style={{ backgroundImage: `url(${require('images/tab_icon_3.png')})`}} />
                             </div>
-                            <div className='home-menu'>
-                                <div title='로그아웃' onClick={() => this.setState({ logoutDialogOpen: true })} className='home-menu-item' style={{ backgroundImage: `url(${require('images/icon_exit.png')})`}} />
+                            <div className='home-tab'>
+                                <div title='로그아웃' onClick={() => this.setState({ logoutDialogOpen: true })} className='home-tab-item' style={{ backgroundImage: `url(${require('images/icon_exit.png')})`}} />
                             </div>
                         </div>
                     </div>
 
+                    {totalUnreadCount > 0 && <div className='room-unread room-unread-global'>{totalUnreadCount}</div>}
+
                     {this.state.view===0 ? <FriendList myInfo={this.state.myInfo} friends={this.state.friends} />
-                    : this.state.view===1 ? <RoomList friends={this.state.friends} rooms={this.state.rooms} onCreateRoom={this.createRoom} onRoomClick={this.openRoom} />
-                    : this.state.view===2 ? null : null}
+                    : this.state.view===1 ? <RoomList myInfo={this.state.myInfo} friends={this.state.friends} rooms={rooms} onCreateRoom={this.createRoom} onRoomClick={this.openRoom} />
+                    : this.state.view===2 ?
+                        <div className='info-box'>
+                            <div className='info-logo' />
+                            <h2>KakaoTalk Replica</h2>
+                            <a cla href='https://github.com/MoonWanki/kakaotalk-replica' rel='noopener noreferrer' target='_blank'>GitHub</a>
+                            <a cla href='https://www.octopusfantasy.com' rel='noopener noreferrer' target='_blank'>Octopus Fanatsy</a>
+                        </div>
+                    : null}
                 </div>
 
                 {this.state.roomOpened && 
@@ -110,8 +127,6 @@ export default class Main extends Component {
                             onClose={this.closeRoom} />
                     </div>
                 }
-
-                {/* {this.state.friendSelectorOpen && <FriendSelector friends={this.state.friends} onSelect={this.createRoom} onCancel={() => this.setState({ friendSelectorOpen: false })}/>} */}
             
                 {this.state.logoutDialogOpen && <Dialog>
                     <div className='dialog-content' autoFocus>정말 로그아웃하시겠습니까?</div>

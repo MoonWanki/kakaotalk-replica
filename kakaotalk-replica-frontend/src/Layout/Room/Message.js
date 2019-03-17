@@ -28,7 +28,7 @@ export default class Message extends Component {
                         <div className='message-info' style={{ flexDirection: isMine ? 'row-reverse' : 'row', alignItems: 'flex-end' }}>
                             {type === 'text' ?
                             <div className='message-content' style={{ background: isMine ? '#ffea2d' : 'white'}}>
-                                {content}
+                                {content.split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}
                             </div>
                             :
                             <img src={`${process.env.REACT_APP_BACKEND_URL}/kakaotalk/res/${content}`} alt='image_message' />}
