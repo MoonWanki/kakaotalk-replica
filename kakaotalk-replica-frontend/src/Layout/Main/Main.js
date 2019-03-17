@@ -74,7 +74,6 @@ export default class Main extends Component {
     logout = () => {
         this.setState({ logoutDialogOpen: false })
         this.socket.emit('logout')
-        document.cookie = 'kakaotalk_id=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
     }
     
     render() {
@@ -111,8 +110,9 @@ export default class Main extends Component {
                         <div className='info-box'>
                             <div className='info-logo' />
                             <h2>KakaoTalk Replica</h2>
-                            <a cla href='https://github.com/MoonWanki/kakaotalk-replica' rel='noopener noreferrer' target='_blank'>GitHub</a>
-                            <a cla href='https://www.octopusfantasy.com' rel='noopener noreferrer' target='_blank'>Octopus Fanatsy</a>
+                            <h4>by Moon Wanki</h4>
+                            <a href='https://github.com/MoonWanki/kakaotalk-replica' rel='noopener noreferrer' target='_blank'>GitHub</a>
+                            <a href='https://www.octopusfantasy.com' rel='noopener noreferrer' target='_blank'>Octopus Fanatsy</a>
                         </div>
                     : null}
                 </div>

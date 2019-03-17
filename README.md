@@ -80,3 +80,6 @@ Generate RFC-compliant UUIDs
 
 - **Jest** | https://jestjs.io  
 Unit testing framework  
+
+- **Enzyme** | https://airbnb.io/enzyme    
+Unit testing tools for React  
