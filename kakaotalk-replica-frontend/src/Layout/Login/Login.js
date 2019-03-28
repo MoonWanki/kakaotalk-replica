@@ -90,7 +90,7 @@ export default class Login extends Component {
 	// 강제 로그인 요청
 	forceLogin = () => {
         this.setState({ alreadyConnectedDialogOpen: false })
-        this.socket.emit('force_login')
+        this.socket.emit('force_login', this.state.id)
 	}
     
     render() {

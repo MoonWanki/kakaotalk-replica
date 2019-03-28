@@ -39,7 +39,8 @@ module.exports = io => {
         })
 
         // 강제로그아웃 후 로그인 요청
-        socket.on('force_login', async () => {
+        socket.on('force_login', async id => {
+            const user = lobby.findUserById(id)
             lobby.kick(user)
             await new Promise(resolve => setTimeout(resolve, 200))
             user.socket = socket
