@@ -7,13 +7,14 @@ class User {
         this.thumbnail = thumbnail
         this.isOnline = false
 
-        this.roomsIn = new Array()
+        this.roomsIn = []  // 이 유저가 참여 중인 모든 Room 인스턴스들
     }
 
     findRoomById(roomId) {
         return this.roomsIn.find(room => room.id === roomId)
     }
 
+    // 모든 채팅 정보 전송 (채팅방목록 UI 업데이트 필요 시 호출)
     notifyRoomStatus() {
         const roomStatus = this.roomsIn.map(room => ({
             id: room.id,

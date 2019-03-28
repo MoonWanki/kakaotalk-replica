@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Thumbnail } from 'Components'
 import './FriendList.scss'
 
+// props로 들어오는 유저정보 array를 리스트 UI로 보여줍니다.
 export default class FriendList extends Component {
 
     state = {
@@ -19,7 +20,11 @@ export default class FriendList extends Component {
 
     render() {
         let friends = this.props.friends
+
+        // 가나다순으로 정렬
         friends.sort((a, b) => a.nickname < b.nickname ? -1 : a.nickname > b.nickname ? 1 : 0)
+
+        // 이름 검색 중일 경우, 검색어에 따라 friends 배열 필터링
         if(this.state.isSearching) {
             friends = friends.filter(f => f.nickname.includes(this.state.searchText))
         }

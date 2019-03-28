@@ -5,6 +5,7 @@ import ss from 'socket.io-stream'
 import uuid from 'uuid/v1'
 import './Room.scss'
 
+// props로 들어오는 하나의 채팅방 정보를 채팅방 UI로 보여줍니다.
 export default class Room extends Component {
     
     socket = this.props.socket
@@ -18,19 +19,9 @@ export default class Room extends Component {
     componentDidMount() {
         window.onkeydown = e => {
             if(e.keyCode === 13 && !e.shiftKey) {
-                this.onSendButtonClick()
+                this.onSendButtonClick() // 쉬프트키 안 누른 채 엔터 키 입력시 메시지 전송
                 e.preventDefault()
             }
-        }
-    }
-
-    onSendButtonClick = () => {
-        if(this.state.text.trim().length) {
-            this.sendMessage({
-                type: 'text',
-                content: this.state.text,
-            })
-            this.setState({ text: '' })
         }
     }
 
@@ -44,6 +35,7 @@ export default class Room extends Component {
         if(isExistentRoom) {
             socket.emit('send_message', room.id, message)
         }
+        // 최초 메시지일 경우
         else {
             socket.emit('send_initial_message', room.id, message, room.members.filter(u => u.id !== myInfo.id))
         }
@@ -66,6 +58,20 @@ export default class Room extends Component {
         this.socket.emit('leave_room', this.props.room.id)
     }
 
+    // ★ 평문 메시지 전송
+    onSendButtonClick = () => {
+        if(this.state.text.trim().length) {
+            this.sendMessage({
+                type: 'text',
+                content: this.state.text,
+            })
+            this.setState({ text: '' })
+        }
+    }
+
+    // ★ 이미지 메시지 전송
+    //    1. 이미지 파일을 서버에 업로드
+    //    2. 업로드된 이미지 파일 URL을 image 타입 메시지로 전송
     sendImage = e => {
         const file = e.target.files[0]
         if(file && file.type.includes('image')) {
@@ -78,10 +84,7 @@ export default class Room extends Component {
             blobStream.on('data', chunk => {
                 sizeUploaded += chunk.length
                 if(sizeUploaded === file.size) {
-                    this.sendMessage({
-                        type: 'image',
-                        content: filename,
-                    })
+                    this.sendMessage({ type: 'image', content: filename })
                 }
             })
             blobStream.pipe(stream)  
@@ -107,13 +110,13 @@ export default class Room extends Component {
                             <div title='닫기' className='room-menu-button room-close-button' onClick={this.props.onClose} />
                         </div>
                         <div className='room-header-content-row'>
-                            <div title='대화상대 초대' className='room-menu-button room-invite-button' onClick={() => this.setState({ friendSelectorOpen: true })} />
+                            <div title='대화상대 초대' className='room-menu-button room-invite-button' onClick={() => this.setState({ friendSelectorOpen: true })} style={{ width: room.messages.length > 1 ? 24 : 0 }} />
                         </div>
                     </div>
                 </div>
 
                 <div className='room-scroller'>
-                    {this.props.room.messages.map((message, i) =>
+                    {room.messages.map((message, i) =>
                         <Message
                             key={i}
                             type={message.type}

@@ -49,17 +49,21 @@ export default class Login extends Component {
 		this.setState({ unregisteredDialogOpen: false, signUpDialogOpen: false, alreadyConnectedDialogOpen: false, invalidIdDialogOpen: false, nickname: '', selectedThumbnail: -1 })
 	}
 
+	// ★ 로그인 시도
     login = () => {
 		if(this.state.id.length) {
+			// 유효하지 않은 ID일 경우: 다이얼로그 띄움
 			if(!!this.state.id.match('[^a-zA-Z0-9]')) {
 				this.setState({ invalidIdDialogOpen: true })
 			}
+			// 유효한 ID일 경우: 서버에 로그인 요청
 			else {
 				this.socket.emit('login', this.state.id)
 			}
 		}
 	}
 
+	// ★ 서버 응답: "미등록 ID"
 	onUnregistered = () => {
 		this.idInput.blur()
 		this.setState({ unregisteredDialogOpen: true })
@@ -69,6 +73,7 @@ export default class Login extends Component {
 		this.setState({ unregisteredDialogOpen: false, signUpDialogOpen: true })
 	}
 
+	// 회원 가입 요청
     signUp = () => {
 		if(this.state.nickname.length && this.state.selectedThumbnail!==-1) {
 			this.setState({ signUpDialogOpen: false })
@@ -76,11 +81,13 @@ export default class Login extends Component {
 		}
     }
 
+	// ★ 서버 응답: "이미 접속 중인 유저"
 	onAlreadyConnected = () => {
 		this.idInput.blur()
 		this.setState({ alreadyConnectedDialogOpen: true })
 	}
 
+	// 강제 로그인 요청
 	forceLogin = () => {
         this.setState({ alreadyConnectedDialogOpen: false })
         this.socket.emit('force_login')

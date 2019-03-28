@@ -4,16 +4,19 @@ import { FriendList, RoomList, Room } from 'Layout'
 import { Dialog, Button } from 'Components'
 import './Main.scss'
 
+// 실시간으로 유저 목록, 채팅방 목록을 받아 state를 업데이트합니다.
 export default class Main extends Component {
 
     state = {
+        friends: [],    // ★ 유저 목록
+        rooms: [],      // ★ 채팅방 목록
+
         view: 0,
-        friends: [],
-        rooms: [],
-        roomOpened: null,
         friendSelectorOpen: false,
         myInfo: this.props.myInfo,
         logoutDialogOpen: false,
+
+        roomOpened: null, // 채팅방 UI ON/OFF. 채팅방 UI를 띄울 땐 해당 채팅방 정보가 여기에도 있게 되며, 채팅방 UI(Room 컴포넌트)는 이걸 참조함.
     }
 
     socket = this.props.socket
@@ -28,12 +31,16 @@ export default class Main extends Component {
         this.socket.off('room_status')
     }
 
+    // ★ 유저 목록 UI 갱신
     onUserStatusUpdated = users => {
         this.setState({ friends: users.filter(u => u.id !== this.state.myInfo.id)})
     }
 
+    // ★ 채팅방 목록 UI 갱신
     onRoomStatusUpdated = rooms => {
         this.setState({ rooms })
+
+        // 채팅방 UI가 열려 있을 경우 
         if(this.state.roomOpened) {
             const room = rooms.find(r => r.id === this.state.roomOpened.id)
             if(room) {
@@ -52,11 +59,13 @@ export default class Main extends Component {
         this.setState({ friendSelectorOpen: false, roomOpened: emptyRoom })
     }
 
+    // 채팅방 UI ON
     openRoom = room => {
         this.setState({ roomOpened: room })
-        this.clearUnread(room)
+        this.clearUnread(room) // 이때 채팅방의 메시지들을 모두 읽은 걸로 간주
     }
 
+    // 채팅방 UI OFF
     closeRoom = () => {
         this.setState({ roomOpened: null })
     }
@@ -71,6 +80,7 @@ export default class Main extends Component {
         }
     }
 
+    // 로그아웃 요청
     logout = () => {
         this.setState({ logoutDialogOpen: false })
         this.socket.emit('logout')
@@ -78,6 +88,7 @@ export default class Main extends Component {
     
     render() {
 
+        // 모든 안 읽은 메시지 수 계산
         let totalUnreadCount = 0
         const rooms = this.state.rooms.map(room => {
             const unreadCount = room.messages.filter(msg => msg.type!=='system' && msg.unreadIds.includes(this.props.myInfo.id)).length
@@ -117,7 +128,8 @@ export default class Main extends Component {
                     : null}
                 </div>
 
-                {this.state.roomOpened && 
+                
+                {this.state.roomOpened &&
                     <div className='room-wrapper' >
                         <Room
                             socket={this.socket}
